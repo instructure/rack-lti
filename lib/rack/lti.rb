@@ -1,7 +1,7 @@
-require "rack/lti/version"
+require 'rack/lti/version'
 
 module Rack
-  module Lti
+  module LTI
     # Your code goes here...
   end
 end

@@ -1,4 +1,4 @@
-# Rack::Lti
+# Rack::LTI
 
 TODO: Write a gem description
 
