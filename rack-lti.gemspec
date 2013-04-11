@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
 
   spec.add_dependency 'ims-lti', '~> 1.1.2'
+  spec.add_dependency 'rack'
 end
