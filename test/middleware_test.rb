@@ -37,4 +37,11 @@ class MiddlewareTest < Minitest::Unit::TestCase
 
 		assert_equal nil, env['rack.lti']
 	end
+
+	def test_call_returns_403_on_invalid_launch
+		@lti_app.stub :valid?, false do
+			response = @lti_app.call(Rack::MockRequest.env_for('/lti/launch'))
+			assert_equal 403, response[0]
+		end
+	end
 end

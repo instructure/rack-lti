@@ -24,9 +24,4 @@ class ConfigTest < Minitest::Unit::TestCase
     assert_equal 3600,                  @config.time_limit
     assert_equal 'LTI App',             @config.title
   end
-
-  def test_config_calls_a_proc_given_to_nonce_validator
-    @config.nonce_validator = ->(nonce) { true }
-    assert_equal true, @config.nonce_validator
-  end
 end
