@@ -13,8 +13,8 @@ class MiddlewareTest < Minitest::Unit::TestCase
 	end
 
 	def test_routes_returns_the_recognized_routes
-		known_routes = { config: @lti_app.config.config_path,
-			launch: @lti_app.config.launch_path }
+		known_routes = { @lti_app.config.config_path => :config_action,
+			@lti_app.config.launch_path => :launch_action }
 		assert_equal known_routes, @lti_app.routes	
 	end
 

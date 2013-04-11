@@ -13,15 +13,30 @@ module Rack::LTI
 
 		def call(env)
 			request = Rack::Request.new(env)
-			if routes.values.include?(request.path)
+			@status, @headers, @response = @app.call(env)
+
+			if routes.has_key?(request.path)
 				env['rack.lti'] = true
+				send(routes[request.path], request)
 			end
 
-			@app.call(env)
+			[@status, @headers, @response]
 		end
 
 		def routes
-			{ config: @config.config_path, launch: @config.launch_path }
+			{
+				@config.config_path => :config_action,
+				@config.launch_path => :launch_action
+			}
+		end
+
+		private
+		def config_action(request)
+						
+		end
+
+		def launch_action(request)
+			
 		end
 	end
 end
