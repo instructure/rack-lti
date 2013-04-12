@@ -32,8 +32,7 @@ module Rack::LTI
     private
 
 		def config_action(request, env)
-      # TODO: remove this hard-coded URL.
-      response = [@config.to_xml(launch_url: 'http://localhost:9393/lti/launch')]
+      response = [@config.to_xml(launch_url: request.url.sub(@config.config_path, @config.launch_path))]
       [200, { 'Content-Type' => 'application/xml', 'Content-Length' => response[0].length.to_s }, response]
 		end
 
