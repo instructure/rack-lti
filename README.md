@@ -95,33 +95,29 @@ end
 Rack::LTI takes either a configuration hash or block at initialization. Allowed
 values are:
 
-  * `consumer_key`: The consumer_key to check against the key given at launch.
+  * `consumer_key` The consumer_key to check against the key given at launch.
     This value can be a string or a lambda. If a lambda, it is passed the key
     used by the consumer as well as their tool_consumer_instance_guid.
-  * `consumer_secret`: The consumer_secret to check against the secret given at
+  * `consumer_secret` The consumer_secret to check against the secret given at
     launch. Like the consumer key, this value can be a string or a lambda. If a
     lambda, it is passed the key and tool_consumer_instance_guid of the
     consumer.
-
-  * `app_path`: The path to redirect to on a successful launch. This should be
+  * `app_path` The path to redirect to on a successful launch. This should be
     the main page of your application. Defaults to '/'.
-  * `config_path`: The path to serve LTI config XML from. Defaults to
+  * `config_path` The path to serve LTI config XML from. Defaults to
     '/lti/config.xml'.
-  * `launch_path`: The path to receive LTI launch requests at. Defaults to
+  * `launch_path` The path to receive LTI launch requests at. Defaults to
     '/lti/launch'.
-
-  * `title`: The title of your LTI application.
-  * `description`: The description of your LTI application.
-  * 
-  * `nonce_validator`: A lambda used to validate the current request's nonce.
+  * `title` The title of your LTI application.
+  * `description` The description of your LTI application.
+  * `nonce_validator` A lambda used to validate the current request's nonce.
     It is passed the nonce to verify. If not provided, all nonces are allowed.
-  * `time_limit`: The time limit, in seconds, to consider requests valid within.
+  * `time_limit` The time limit, in seconds, to consider requests valid within.
     If not passed, the default is 3600 seconds (one hour).
-
-  * `extensions`: A hash of extension information to include with the config.
+  * `extensions` A hash of extension information to include with the config.
     Format is platform -> option -> properties. See usage examples above for
     more detail.
-  * `custom_params`: A hash of custom parameters to accept from the client. See
+  * `custom_params` A hash of custom parameters to accept from the client. See
     usage examples above for more detail.
 
 ## About LTI
