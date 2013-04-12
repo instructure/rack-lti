@@ -37,8 +37,8 @@ module Rack::LTI
 		end
 
 		def launch_action(request, env)
-			provider = IMS::LTI::ToolProvider.new(@config.consumer_key,
-																						@config.consumer_secret,
+			provider = IMS::LTI::ToolProvider.new(@config.consumer_key(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid')),
+																						@config.consumer_secret(*request.params.values_at('oauth_consumer_secret')),
 																						request.params)
 
 			if valid?(provider, request)
