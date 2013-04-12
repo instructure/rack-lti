@@ -102,18 +102,22 @@ values are:
     launch. Like the consumer key, this value can be a string or a lambda. If a
     lambda, it is passed the key and tool_consumer_instance_guid of the
     consumer.
+
   * `app_path`: The path to redirect to on a successful launch. This should be
     the main page of your application. Defaults to '/'.
   * `config_path`: The path to serve LTI config XML from. Defaults to
     '/lti/config.xml'.
   * `launch_path`: The path to receive LTI launch requests at. Defaults to
     '/lti/launch'.
+
   * `title`: The title of your LTI application.
   * `description`: The description of your LTI application.
+  * 
   * `nonce_validator`: A lambda used to validate the current request's nonce.
     It is passed the nonce to verify. If not provided, all nonces are allowed.
   * `time_limit`: The time limit, in seconds, to consider requests valid within.
     If not passed, the default is 3600 seconds (one hour).
+
   * `extensions`: A hash of extension information to include with the config.
     Format is platform -> option -> properties. See usage examples above for
     more detail.
