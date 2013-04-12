@@ -32,13 +32,14 @@ module Rack::LTI
     private
 
 		def config_action(request, env)
+      # TODO: remove this hard-coded URL.
       response = [@config.to_xml(launch_url: 'http://localhost:9393/lti/launch')]
       [200, { 'Content-Type' => 'application/xml', 'Content-Length' => response[0].length.to_s }, response]
 		end
 
 		def launch_action(request, env)
 			provider = IMS::LTI::ToolProvider.new(@config.consumer_key(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid')),
-																						@config.consumer_secret(*request.params.values_at('oauth_consumer_secret')),
+																						@config.consumer_secret(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid')),
 																						request.params)
 
 			if valid?(provider, request)

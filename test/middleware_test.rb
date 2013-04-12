@@ -7,13 +7,15 @@ class MiddlewareTest < Minitest::Unit::TestCase
 		@app     = ->(env) { [200, {}, ['hi']] }
 		@lti_app = Rack::LTI::Middleware.new(@app)
     @params  = {
-      lti_message_type:    'basic-lti-launch-request',
-      lti_version:         'LTI-1p0',
-      resource_link_id:    '88391-e1919-bb3456',
-      resource_link_title: 'Resource Title',
-      user_id:             '0ae836b9-7fc9-4060-006f-27b2066ac545',
-      roles:               'instructor',
-      oauth_nonce:         '12345',
+      lti_message_type:            'basic-lti-launch-request',
+      lti_version:                 'LTI-1p0',
+      resource_link_id:            '88391-e1919-bb3456',
+      resource_link_title:         'Resource Title',
+      user_id:                     '0ae836b9-7fc9-4060-006f-27b2066ac545',
+      roles:                       'instructor',
+      tool_consumer_instance_guid: 'guid',
+      oauth_consumer_key:          'key',
+      oauth_nonce:                 '12345',
       oauth_timestamp:     Time.now.to_i.to_s
     }.reduce({}) { |m, h| m[h[0].to_s] = h[1]; m }
 	end
@@ -110,4 +112,31 @@ class MiddlewareTest < Minitest::Unit::TestCase
     response = @lti_app.call(Rack::MockRequest.env_for('/lti/config.xml'))
     assert_equal 'application/xml', response[1]['Content-Type']
   end
+
+  def test_consumer_key_is_passed_request_information
+    @lti_app.config[:consumer_key] = ->(key, guid) {
+      assert_equal 'key',  key
+      assert_equal 'guid', guid
+    }
+
+    @lti_app.stub(:valid?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      @lti_app.call(env)
+    end
+  end
+
+  def test_consumer_secret_is_passed_request_information
+    @lti_app.config[:consumer_secret] = ->(key, guid) {
+      assert_equal 'key',  key
+      assert_equal 'guid', guid
+    }
+
+    @lti_app.stub(:valid?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      @lti_app.call(env)
+    end
+  end
+
 end
