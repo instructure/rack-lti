@@ -26,6 +26,10 @@ module Rack::LTI
       end
     end
 
+    def public?
+      self[:consumer_key].nil? && self[:consumer_secret].nil?
+    end
+
     def method_missing(method, *args, &block)
       if method.match(/=$/)
         self[method.to_s[0..-2].to_sym] = args.first

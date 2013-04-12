@@ -55,4 +55,10 @@ class ConfigTest < Minitest::Unit::TestCase
     @config[:nonce_validator] = ->(n) { n + 1 }
     assert_equal 2, @config.nonce_validator(1)
   end
+
+  def test_public_returns_true_if_no_key_or_secret_is_set
+    @config[:consumer_key]    = nil
+    @config[:consumer_secret] = nil
+    assert @config.public?
+  end
 end

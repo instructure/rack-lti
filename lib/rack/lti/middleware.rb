@@ -57,7 +57,7 @@ module Rack::LTI
 		end
 
     def valid_request?(provider, request)
-      provider.valid_request?(request)
+      @config.public? ? true : provider.valid_request?(request)
     end
 
     def valid_nonce?(nonce)
