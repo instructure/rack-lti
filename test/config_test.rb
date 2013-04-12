@@ -101,4 +101,11 @@ class ConfigTest < Minitest::Unit::TestCase
     assert_equal 'http://example.com',
                  REXML::XPath.match(body, '//lticm:property[@name="url"]').first.text
   end
+
+  def test_to_xml_includes_custom_params
+    @config[:custom_params] = { ck1: 'one', ck2: 'two' }
+    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+    assert_equal 'one', REXML::XPath.match(body, '//blti:custom/lticm:property[@name="ck1"]').first.text
+    assert_equal 'two', REXML::XPath.match(body, '//blti:custom/lticm:property[@name="ck2"]').first.text
+  end
 end
