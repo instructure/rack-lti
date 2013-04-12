@@ -6,9 +6,9 @@ module Rack::LTI
 	class Middleware
 		attr_reader :app, :config
 
-		def initialize(app, options = {})
+		def initialize(app, options = {}, &block)
 			@app    = app	
-			@config = Config.new(options)
+			@config = Config.new(options, &block)
 		end
 
 		def call(env)

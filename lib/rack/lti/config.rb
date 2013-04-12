@@ -14,6 +14,7 @@ module Rack::LTI
 
     def initialize(options = {})
       DEFAULT.merge(options).each { |k, v| self[k] = v }
+      instance_eval { yield(self) } if block_given?
     end
 
     [:consumer_key, :consumer_secret, :nonce_validator].each do |method|

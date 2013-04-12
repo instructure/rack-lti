@@ -17,6 +17,14 @@ class ConfigTest < Minitest::Unit::TestCase
     assert_equal 'value', @config.setting
   end
 
+  def test_config_accepts_a_block
+    config = Rack::LTI::Config.new do |c|
+      c[:title] = 'custom title'
+    end
+
+    assert_equal 'custom title', config[:title]
+  end
+
   def test_config_populates_default_values
     assert_equal '/',                   @config.app_path
     assert_equal '/lti/config.xml',     @config.config_path
