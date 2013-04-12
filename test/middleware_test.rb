@@ -105,4 +105,9 @@ class MiddlewareTest < Minitest::Unit::TestCase
       assert_equal 301, response[0]
     end
   end
+
+  def test_call_returns_xml_when_config_path_is_used
+    response = @lti_app.call(Rack::MockRequest.env_for('/lti/config.xml'))
+    assert_equal 'application/xml', response[1]['Content-Type']
+  end
 end

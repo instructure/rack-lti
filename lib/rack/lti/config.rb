@@ -1,3 +1,5 @@
+require 'ims/lti'
+
 module Rack::LTI
   class Config < Hash
     DEFAULT = {
@@ -11,9 +13,7 @@ module Rack::LTI
     }
 
     def initialize(options = {})
-      DEFAULT.merge(options).each do |k, v|
-        self[k] = v
-      end
+      DEFAULT.merge(options).each { |k, v| self[k] = v }
     end
 
     [:consumer_key, :consumer_secret, :nonce_validator].each do |method|
@@ -28,6 +28,16 @@ module Rack::LTI
 
     def public?
       self[:consumer_key].nil? && self[:consumer_secret].nil?
+    end
+
+    def to_xml(options = {})
+      # Stringify keys for IMS::LTI
+      config = self.merge(options).inject({}) do |h, v|
+        h[v[0].to_s] = v[1]
+        h
+      end
+
+      IMS::LTI::ToolConfig.new(config).to_xml(indent: 2)
     end
 
     def method_missing(method, *args, &block)

@@ -33,7 +33,7 @@ module Rack::LTI
     private
 
 		def config_action(request, env)
-						
+      @headers['Content-Type'] = 'application/xml'
 		end
 
 		def launch_action(request, env)

@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'rexml/document'
 require 'rack/lti/config'
 
 class ConfigTest < Minitest::Unit::TestCase
@@ -60,5 +61,36 @@ class ConfigTest < Minitest::Unit::TestCase
     @config[:consumer_key]    = nil
     @config[:consumer_secret] = nil
     assert @config.public?
+  end
+
+  def test_to_xml_returns_an_xml_lti_config
+    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+
+    assert_equal @config.title,
+                 REXML::XPath.match(body, '//blti:title').first.text
+    assert_equal @config.description,
+                 REXML::XPath.match(body, '//blti:description').first.text
+    assert_equal 'http://example.com/launch',
+                 REXML::XPath.match(body, '//blti:launch_url').first.text
+  end
+
+  def test_to_xml_includes_extensions
+    @config[:extensions] = {
+      'canvas.instructure.com' => {
+        'course_navigation' => {
+          'privacy_level' => 'anonymous',
+          'text'          => 'Tool title',
+          'url'           => 'http://example.com'
+        }
+      }
+    }
+
+    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+    assert_equal 'anonymous',
+                 REXML::XPath.match(body, '//lticm:property[@name="privacy_level"]').first.text
+    assert_equal 'Tool title',
+                 REXML::XPath.match(body, '//lticm:property[@name="text"]').first.text
+    assert_equal 'http://example.com',
+                 REXML::XPath.match(body, '//lticm:property[@name="url"]').first.text
   end
 end
