@@ -14,6 +14,12 @@ Add this line to your application's Gemfile:
 
 ## Usage
 
+Rack::LTI should work with any Rack-based app. This means Rails 3.x and
+Sinatra, and probably whatever wonky framework you happen to be using.
+
+Rack::LTI is tested on MRI Ruby 1.9 and 2.0, and the 1.9 branches of JRuby
+and Rubinius. It will not work on any flavor of 1.8; upgrade already.
+
 ### Rails 3
 
 Add Rack::LTI to your `config/application.rb`:
@@ -41,6 +47,10 @@ class Application < Rails::Application
           text: 'My LTI App'
         }
       }
+    }
+
+    custom_params: {
+      preferred_name: 'El Tigre Chino'
     }
 end
 ```
@@ -73,6 +83,10 @@ class Application < Sinatra::Base
         }
       }
     }
+
+    custom_params: {
+      preferred_name: 'El Tigre Chino'
+    }
 end
 ```
 
@@ -103,6 +117,15 @@ values are:
   * `extensions`: A hash of extension information to include with the config.
     Format is platform -> option -> properties. See usage examples above for
     more detail.
+  * `custom_params`: A hash of custom parameters to accept from the client. See
+    usage examples above for more detail.
+
+## About LTI
+
+Interested in learning more about LTI? Here are some links to get you started:
+
+  * [Introduction to LTI](http://www.imsglobal.org/toolsinteroperability2.cfm)
+  * [1.1.1 Implementation Guide](http://www.imsglobal.org/LTI/v1p1p1/ltiIMGv1p1p1.html)
 
 ## Contributing
 
