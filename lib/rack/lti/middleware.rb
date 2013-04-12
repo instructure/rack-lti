@@ -47,8 +47,8 @@ module Rack::LTI
         @headers['Location'] = @config.app_path
 			else
 				@status   = 403
-				@response = []
-				@headers['Content-Length'] = 0
+				@response = ['Invalid launch.']
+				@headers['Content-Length'] = @response[0].length.to_s
 			end
 		end
 
