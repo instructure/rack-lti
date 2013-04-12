@@ -4,6 +4,8 @@ require 'rack/lti/version'
 
 module Rack
   module LTI
-    # Your code goes here...
+    def self.new(*args, &block)
+      Middleware.new(*args, &block)
+    end
   end
 end
