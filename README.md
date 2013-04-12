@@ -37,7 +37,7 @@ class Application < Rails::Application
     title:       'My LTI App',
     description: 'My LTI App description',
 
-    nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) }
+    nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
     time_limit: 60*60,
 
     extensions: {
@@ -47,7 +47,7 @@ class Application < Rails::Application
           text: 'My LTI App'
         }
       }
-    }
+    },
 
     custom_params: {
       preferred_name: 'El Tigre Chino'
@@ -62,8 +62,8 @@ Add Rack::LTI to your app:
 ```ruby
 class Application < Sinatra::Base
   use Rack::LTI,
-    consumer_key:    'my_key'
-    consumer_secret: 'my_secret'
+    consumer_key:    'my_key',
+    consumer_secret: 'my_secret',
 
     app_path:    '/',
     config_path: '/lti/config.xml',
@@ -72,7 +72,7 @@ class Application < Sinatra::Base
     title:       'My LTI App',
     description: 'My LTI App description',
 
-    nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) }
+    nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
     time_limit: 60*60,
 
     extensions: {
@@ -82,7 +82,7 @@ class Application < Sinatra::Base
           text: 'My LTI App'
         }
       }
-    }
+    },
 
     custom_params: {
       preferred_name: 'El Tigre Chino'
