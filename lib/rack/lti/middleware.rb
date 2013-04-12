@@ -18,6 +18,7 @@ module Rack::LTI
 			if routes.has_key?(request.path)
 				env['rack.lti'] = true
 				send(routes[request.path], request, env)
+        @headers['Content-Length'] = @response[0].length.to_s
 			end
 
 			[@status, @headers, @response]
@@ -33,6 +34,8 @@ module Rack::LTI
     private
 
 		def config_action(request, env)
+      @status = 200
+      @response = [@config.to_xml(launch_url: 'http://localhost:9393/lti/launch')]
       @headers['Content-Type'] = 'application/xml'
 		end
 
@@ -48,7 +51,6 @@ module Rack::LTI
 			else
 				@status   = 403
 				@response = ['Invalid launch.']
-				@headers['Content-Length'] = @response[0].length.to_s
 			end
 		end
 

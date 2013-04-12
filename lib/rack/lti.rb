@@ -1,3 +1,5 @@
+require 'rack/lti/config'
+require 'rack/lti/middleware'
 require 'rack/lti/version'
 
 module Rack
