@@ -8,8 +8,14 @@ Gem::Specification.new do |spec|
   spec.version       = Rack::LTI::VERSION
   spec.authors       = ['Zach Pendleton']
   spec.email         = ['zachpendleton@gmail.com']
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = <<-END
+    Rack::LTI provides LTI launch and configuration endpoints to your
+    Rack-based application. It handles configuration, authorization, and
+    routing.
+
+    For more information about LTI, see http://www.imsglobal.org/toolsinteroperability2.cfm.
+  END
+  spec.summary       = %q{Middleware for handling LTI launches inside your Rack app.}
   spec.homepage      = 'https://github.com/zachpendleton/rack-lti'
   spec.license       = 'MIT'
 
