@@ -43,6 +43,8 @@ module Rack::LTI
 
 			if valid?(provider, request)
 				env['rack.session']['launch_params'] = provider.to_params	if env['rack.session']
+        @status = 301
+        @headers['Location'] = @config.app_path
 			else
 				@status   = 403
 				@response = []

@@ -86,4 +86,23 @@ class MiddlewareTest < Minitest::Unit::TestCase
                    env['rack.session']['launch_params'].keys.sort
     end
   end
+
+  def test_call_redirects_to_app_path_on_success
+    @lti_app.stub(:valid_request?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      response = @lti_app.call(env)
+      assert_equal 301, response[0]
+      assert_equal @lti_app.config[:app_path], response[1]['Location']
+    end
+  end
+
+  def test_call_succeeds_if_sessions_are_not_used
+    @lti_app.stub(:valid_request?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      response = @lti_app.call(env)
+      assert_equal 301, response[0]
+    end
+  end
 end
