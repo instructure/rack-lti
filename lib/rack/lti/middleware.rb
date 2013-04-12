@@ -17,7 +17,7 @@ module Rack::LTI
 
 			if routes.has_key?(request.path)
 				env['rack.lti'] = true
-				send(routes[request.path], request)
+				send(routes[request.path], request, env)
 			end
 
 			[@status, @headers, @response]
@@ -30,12 +30,13 @@ module Rack::LTI
 			}
 		end
 
-		private
-		def config_action(request)
+    private
+
+		def config_action(request, env)
 						
 		end
 
-		def launch_action(request)
+		def launch_action(request, env)
 			provider = IMS::LTI::ToolProvider.new(@config.consumer_key,
 																						@config.consumer_secret,
 																						request.params)
@@ -50,7 +51,29 @@ module Rack::LTI
 		end
 
 		def valid?(provider, request)
-			provider.valid_request?(request)
+			valid_request?(provider, request) &&
+        valid_nonce?(request.params['oauth_nonce']) &&
+        valid_timestamp?(request.params['oauth_timestamp'].to_i)
 		end
+
+    def valid_request?(provider, request)
+      provider.valid_request?(request)
+    end
+
+    def valid_nonce?(nonce)
+      if @config.nonce_validator.respond_to?(:call)
+        @config.nonce_validator.call(nonce)
+      else
+        @config.nonce_validator
+      end
+    end
+
+    def valid_timestamp?(timestamp)
+      if @config.time_limit.nil?
+        true
+      else
+        (Time.now.to_i - @config.time_limit) <= timestamp
+      end
+    end
 	end
 end
