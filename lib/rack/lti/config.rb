@@ -8,6 +8,7 @@ module Rack::LTI
       description:     'An LTI Application.',
       launch_path:     '/lti/launch',
       nonce_validator: true,
+      success:         ->(params, session) { session['launch_params'] = params if session },
       time_limit:      60*60,
       title:           'LTI App'
     }

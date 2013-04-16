@@ -42,7 +42,7 @@ module Rack::LTI
 																						request.params)
 
 			if valid?(provider, request)
-				env['rack.session']['launch_params'] = provider.to_params	if env['rack.session']
+        @config.success.call(provider.to_params, env['rack.session'])
         [301, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
 			else
         response = 'Invalid launch.'

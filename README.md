@@ -38,6 +38,9 @@ class Application < Rails::Application
     description: 'My LTI App description',
 
     nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
+    success: ->(params, session) {
+      params['launch_params'] = params unless session.nil?
+    },
     time_limit: 60*60,
 
     extensions: {
@@ -73,6 +76,9 @@ class Application < Sinatra::Base
     description: 'My LTI App description',
 
     nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
+    success: ->(params, session) {
+      params['launch_params'] = params unless session.nil?
+    },
     time_limit: 60*60,
 
     extensions: {
@@ -114,6 +120,10 @@ values are:
     It is passed the nonce to verify. If not provided, all nonces are allowed.
   * `time_limit` The time limit, in seconds, to consider requests valid within.
     If not passed, the default is 3600 seconds (one hour).
+  * `success` A lambda called on successful launch. It is passed the launch
+    params as a hash and the session if present. Can be used to cache params
+    for the current user, find the current user, etc. If not given, the launch
+    params are stored in the 'launch_params' key of the session.
   * `extensions` A hash of extension information to include with the config.
     Format is platform -> option -> properties. See usage examples above for
     more detail.
