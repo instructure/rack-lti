@@ -61,8 +61,8 @@ module Rack::LTI
     end
 
     def valid_nonce?(nonce)
-      if @config.nonce_validator.respond_to?(:call)
-        @config.nonce_validator.call(nonce)
+      if @config[:nonce_validator].respond_to?(:call)
+        @config.nonce_validator(nonce)
       else
         @config.nonce_validator
       end

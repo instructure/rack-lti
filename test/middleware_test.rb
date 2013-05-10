@@ -57,8 +57,19 @@ class MiddlewareTest < Minitest::Unit::TestCase
 		end
 	end
 
+  def test_call_passes_the_nonce_to_the_given_proc
+    assertion = MiniTest::Mock.new
+    assertion.expect(:call, true)
+    @lti_app.config.nonce_validator = ->(nonce) { assertion.call }
+
+    @lti_app.stub(:valid_request?, true) do
+      @lti_app.call(Rack::MockRequest.env_for('/lti/launch'))
+      assertion.verify
+    end
+  end
+
   def test_call_returns_403_on_invalid_nonce
-    @lti_app.config.nonce_validator ->(nonce) { false }
+    @lti_app.config.nonce_validator = ->(nonce) { false }
 
     @lti_app.stub(:valid_request?, true) do
       response = @lti_app.call(Rack::MockRequest.env_for('/lti/launch'))
