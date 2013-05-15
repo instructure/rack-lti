@@ -27,8 +27,8 @@ Add Rack::LTI to your `config/application.rb`:
 ```ruby
 class Application < Rails::Application
   config.middleware.use Rack::LTI,
-    consumer_key:    ->(key, consumer_id) { key == 'key_value' },
-    consumer_secret: ->(secret) { secret == 'top_secret' }
+    consumer_key:    ->(key, consumer_id) { 'key' },
+    consumer_secret: ->(key, consumer_id) { 'secret' }
 
     app_path:    '/',
     config_path: '/lti/config.xml',
