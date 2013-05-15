@@ -39,7 +39,7 @@ class Application < Rails::Application
 
     nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
     success: ->(params, session) {
-      params['launch_params'] = params unless session.nil?
+      session['launch_params'] = params unless session.nil?
     },
     time_limit: 60*60,
 
@@ -77,7 +77,7 @@ class Application < Sinatra::Base
 
     nonce_validator: ->(nonce) { !FakeNonceStore.include?(nonce) },
     success: ->(params, session) {
-      params['launch_params'] = params unless session.nil?
+      session['launch_params'] = params unless session.nil?
     },
     time_limit: 60*60,
 
