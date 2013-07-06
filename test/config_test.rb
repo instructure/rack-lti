@@ -33,6 +33,7 @@ class ConfigTest < Minitest::Unit::TestCase
     assert_equal true,                  @config.nonce_validator
     assert_equal 3600,                  @config.time_limit
     assert_equal 'LTI App',             @config.title
+    assert_equal true,                  @config.redirect
     assert_instance_of Proc,            @config.success
   end
 

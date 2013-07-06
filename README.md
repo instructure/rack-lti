@@ -33,6 +33,7 @@ class Application < Rails::Application
     app_path:    '/',
     config_path: '/lti/config.xml',
     launch_path: '/lti/launch',
+    redirect: true,
 
     title:       'My LTI App',
     description: 'My LTI App description',
@@ -71,6 +72,7 @@ class Application < Sinatra::Base
     app_path:    '/',
     config_path: '/lti/config.xml',
     launch_path: '/lti/launch',
+    redirect: true,
 
     title:       'My LTI App',
     description: 'My LTI App description',
@@ -114,6 +116,8 @@ values are:
     '/lti/config.xml'.
   * `launch_path` The path to receive LTI launch requests at. Defaults to
     '/lti/launch'.
+  * `redirect` If true, redirect to the `app_path`. If false, pass the launch
+    request through to the application. If false, app_path is not used.
   * `title` The title of your LTI application.
   * `description` The description of your LTI application.
   * `nonce_validator` A lambda used to validate the current request's nonce.

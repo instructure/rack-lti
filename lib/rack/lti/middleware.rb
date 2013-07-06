@@ -43,7 +43,11 @@ module Rack::LTI
 
       if valid?(provider, request)
         @config.success.call(provider.to_params, env['rack.session'])
-        [301, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
+        if @config.redirect
+          [301, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
+        else
+          @app.call(env)
+        end
       else
         response = 'Invalid launch.'
         [403, { 'Content-Type' => 'text/plain', 'Content-Length' => response.length.to_s }, [response]]

@@ -110,6 +110,17 @@ class MiddlewareTest < Minitest::Unit::TestCase
     end
   end
 
+  def test_passes_request_through_if_redirect_is_false
+    @lti_app.config[:redirect] = false
+    @lti_app.stub(:valid_request?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      response = @lti_app.call(env)
+      assert_equal 200, response[0]
+      assert_equal %w{hi}, response[2]
+    end
+  end
+
   def test_call_succeeds_if_sessions_are_not_used
     @lti_app.stub(:valid_request?, true) do
       env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
@@ -149,5 +160,4 @@ class MiddlewareTest < Minitest::Unit::TestCase
       @lti_app.call(env)
     end
   end
-
 end
