@@ -59,11 +59,12 @@ class MiddlewareTest < Minitest::Unit::TestCase
 
   def test_call_passes_the_nonce_to_the_given_proc
     assertion = MiniTest::Mock.new
-    assertion.expect(:call, true)
-    @lti_app.config.nonce_validator = ->(nonce) { assertion.call }
+    assertion.expect(:call, true, [@params['oauth_nonce']])
+    @lti_app.config.nonce_validator = ->(nonce) { assertion.call(nonce) }
 
     @lti_app.stub(:valid_request?, true) do
-      @lti_app.call(Rack::MockRequest.env_for('/lti/launch'))
+      @lti_app.call(Rack::MockRequest.env_for('/lti/launch',
+                                              method: 'post', params: @params))
       assertion.verify
     end
   end
