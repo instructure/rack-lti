@@ -44,7 +44,7 @@ module Rack::LTI
       if valid?(provider, request)
         @config.success.call(provider.to_params, env['rack.session'])
         if @config.redirect
-          [301, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
+          [302, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
         else
           @app.call(env)
         end

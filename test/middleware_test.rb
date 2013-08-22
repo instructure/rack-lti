@@ -105,7 +105,7 @@ class MiddlewareTest < Minitest::Unit::TestCase
       env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
                                       params: @params)
       response = @lti_app.call(env)
-      assert_equal 301, response[0]
+      assert_equal 302, response[0]
       assert_equal @lti_app.config[:app_path], response[1]['Location']
     end
   end
@@ -126,7 +126,7 @@ class MiddlewareTest < Minitest::Unit::TestCase
       env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
                                       params: @params)
       response = @lti_app.call(env)
-      assert_equal 301, response[0]
+      assert_equal 302, response[0]
     end
   end
 
