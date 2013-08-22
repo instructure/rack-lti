@@ -42,9 +42,12 @@ module Rack::LTI
                                             request.params)
 
       if valid?(provider, request)
-        @config.success.call(provider.to_params, env['rack.session'])
+        req = Rack::Request.new(env)
+        res = Rack::Response.new([], 302, { 'Content-Length' => '0',
+          'Content-Type' => 'text/html', 'Location' => @config.app_path })
+        @config.success.call(provider.to_params, req, res)
         if @config.redirect
-          [302, { 'Content-Length' => '0', 'Content-Type' => 'text/html', 'Location' => @config.app_path }, []]
+          res.finish
         else
           @app.call(env)
         end

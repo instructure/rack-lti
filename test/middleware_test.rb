@@ -122,6 +122,19 @@ class MiddlewareTest < Minitest::Unit::TestCase
     end
   end
 
+  def test_call_passes_params_request_and_response_to_success_proc
+    @lti_app.config.success = ->(lti, req, res) {
+      assert_equal @params.sort,         lti.sort
+      assert_instance_of Rack::Request,  req
+      assert_instance_of Rack::Response, res
+    }
+    @lti_app.stub(:valid_request?, true) do
+      env = Rack::MockRequest.env_for('/lti/launch', method: 'post',
+                                      params: @params)
+      @lti_app.call(env)
+    end
+  end
+
   def test_call_succeeds_if_sessions_are_not_used
     @lti_app.stub(:valid_request?, true) do
       env = Rack::MockRequest.env_for('/lti/launch', method: 'post',

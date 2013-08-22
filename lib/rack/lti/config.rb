@@ -9,7 +9,9 @@ module Rack::LTI
       launch_path:     '/lti/launch',
       nonce_validator: true,
       redirect:        true,
-      success:         ->(params, session) { session['launch_params'] = params if session },
+      success:         ->(lti, req, res) {
+        req.session['launch_params'] = lti if req.env['rack.session']
+      },
       time_limit:      60*60,
       title:           'LTI App'
     }
