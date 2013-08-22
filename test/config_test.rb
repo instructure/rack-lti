@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'rexml/document'
 require 'rack/lti/config'
 
-class ConfigTest < Minitest::Unit::TestCase
+class ConfigTest < Minitest::Test
   def setup
     @config = Rack::LTI::Config.new
   end

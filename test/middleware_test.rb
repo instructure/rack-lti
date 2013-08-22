@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'rack'
 require 'rack/lti/middleware'
 
-class MiddlewareTest < Minitest::Unit::TestCase
+class MiddlewareTest < Minitest::Test
 	def setup
 		@app     = ->(env) { [200, {}, ['hi']] }
 		@lti_app = Rack::LTI::Middleware.new(@app)

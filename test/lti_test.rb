@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'rack-lti'
 
-class LtiTest < Minitest::Unit::TestCase
+class LtiTest < Minitest::Test
   def setup
     @app = ->(env) { [200, [], ['Hi']] }
   end
