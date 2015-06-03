@@ -74,7 +74,7 @@ class ConfigTest < Minitest::Test
   end
 
   def test_to_xml_returns_an_xml_lti_config
-    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+    body = REXML::Document.new(@config.to_xml(nil, launch_url: 'http://example.com/launch'))
 
     assert_equal @config.title,
                  REXML::XPath.match(body, '//blti:title').first.text
@@ -84,7 +84,7 @@ class ConfigTest < Minitest::Test
                  REXML::XPath.match(body, '//blti:launch_url').first.text
   end
 
-  def test_to_xml_includes_extensions
+  def test_to_xml_includes_hardcoded_extensions
     @config[:extensions] = {
       'canvas.instructure.com' => {
         'course_navigation' => {
@@ -95,7 +95,7 @@ class ConfigTest < Minitest::Test
       }
     }
 
-    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+    body = REXML::Document.new(@config.to_xml(nil, launch_url: 'http://example.com/launch'))
     assert_equal 'anonymous',
                  REXML::XPath.match(body, '//lticm:property[@name="privacy_level"]').first.text
     assert_equal 'Tool title',
@@ -104,9 +104,29 @@ class ConfigTest < Minitest::Test
                  REXML::XPath.match(body, '//lticm:property[@name="url"]').first.text
   end
 
+  def test_to_xml_includes_extensions_with_lambdas
+    rack_request_stub = Struct.new(:base_url).new('rack-url.com')
+    @config[:extensions] = {
+      'canvas.instructure.com' => -> (req) do
+        {
+          'editor_button' => {
+            'size'     => '16x16',
+            'icon_url' => "#{req.base_url}/public/icon.png"
+          }
+        }
+      end
+    }
+
+    body = REXML::Document.new(@config.to_xml(rack_request_stub, launch_url: 'http://example.com/launch'))
+    assert_equal '16x16',
+                 REXML::XPath.match(body, '//lticm:property[@name="size"]').first.text
+    assert_equal 'rack-url.com/public/icon.png',
+                 REXML::XPath.match(body, '//lticm:property[@name="icon_url"]').first.text
+  end
+
   def test_to_xml_includes_custom_params
     @config[:custom_params] = { ck1: 'one', ck2: 'two' }
-    body = REXML::Document.new(@config.to_xml(launch_url: 'http://example.com/launch'))
+    body = REXML::Document.new(@config.to_xml(nil, launch_url: 'http://example.com/launch'))
     assert_equal 'one', REXML::XPath.match(body, '//blti:custom/lticm:property[@name="ck1"]').first.text
     assert_equal 'two', REXML::XPath.match(body, '//blti:custom/lticm:property[@name="ck2"]').first.text
   end

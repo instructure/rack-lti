@@ -32,7 +32,8 @@ module Rack::LTI
     private
 
     def config_action(request, env)
-      response = [@config.to_xml(launch_url: request.url.sub(@config.config_path, @config.launch_path))]
+      launch_url = request.url.sub(@config.config_path, @config.launch_path)
+      response = [@config.to_xml(request, launch_url: launch_url)]
       [200, { 'Content-Type' => 'application/xml', 'Content-Length' => response[0].length.to_s }, response]
     end
 
