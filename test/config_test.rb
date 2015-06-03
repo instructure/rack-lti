@@ -107,7 +107,7 @@ class ConfigTest < Minitest::Test
   def test_to_xml_includes_extensions_with_lambdas
     rack_request_stub = Struct.new(:base_url).new('rack-url.com')
     @config[:extensions] = {
-      'canvas.instructure.com' => -> (req) do
+      'canvas.instructure.com' => ->(req) do
         {
           'editor_button' => {
             'size'     => '16x16',
