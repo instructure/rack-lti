@@ -36,7 +36,7 @@ module Rack::LTI
     end
 
     def to_xml(request, options = {})
-      options.merge! get_extensions(request)
+      options = options.merge(get_extensions(request))
 
       # Stringify keys for IMS::LTI
       config = self.merge(options).inject({}) do |h, v|
