@@ -35,7 +35,9 @@ module Rack::LTI
       self[:consumer_key].nil? && self[:consumer_secret].nil?
     end
 
-    def to_xml(options = {})
+    def to_xml(request, options = {})
+      options = options.merge(get_extensions(request))
+
       # Stringify keys for IMS::LTI
       config = self.merge(options).inject({}) do |h, v|
         h[v[0].to_s] = v[1]
@@ -53,6 +55,17 @@ module Rack::LTI
       else
         super
       end
+    end
+
+    private
+
+    def get_extensions(request)
+      return {} unless self.key? :extensions
+      extensions = self[:extensions].inject({}) do |h, (k, v)|
+        h[k] = v.respond_to?(:call) ? v.call(request) : v
+        h
+      end
+      { extensions: extensions }
     end
   end
 end
