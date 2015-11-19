@@ -37,29 +37,9 @@ module Rack::LTI
       [200, { 'Content-Type' => 'application/xml', 'Content-Length' => response[0].length.to_s }, response]
     end
 
-    def consumer_key_wrapper(key, consumer_id, req)
-      case @config.consumer_key.parameters.length
-      when 2
-        # Maintain backwards compatibility with previous #consumer_key signature
-        @config.consumer_key(key, consumer_id)
-      when 3
-        @config.consumer_key(key, consumer_id, req)
-      end
-    end
-
-    def consumer_secret_wrapper(key, consumer_id, req)
-      case @config.consumer_secret.parameters.length
-      when 2
-        # Maintain backwards compatibility with previous #consumer_secret signature
-        @config.consumer_secret(key, consumer_id)
-      when 3
-        @config.consumer_secret(key, consumer_id, req)
-      end
-    end
-
     def launch_action(request, env)
-      provider = IMS::LTI::ToolProvider.new(consumer_key_wrapper(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid'), request),
-                                            consumer_secret_wrapper(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid'), request),
+      provider = IMS::LTI::ToolProvider.new(@config.consumer_key(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid'), request),
+                                            @config.consumer_secret(*request.params.values_at('oauth_consumer_key', 'tool_consumer_instance_guid'), request),
                                             request.params)
 
       if valid?(provider, request)

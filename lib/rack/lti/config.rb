@@ -24,7 +24,9 @@ module Rack::LTI
     [:consumer_key, :consumer_secret, :nonce_validator].each do |method|
       define_method(method) do |*args|
         if self[method].respond_to?(:call)
-          self[method].call(*args)
+          # Only pass the arguments supported by this lambda
+          supported_args = args.take(self[method].parameters.length)
+          self[method].call(*supported_args)
         else
           self[method]
         end
