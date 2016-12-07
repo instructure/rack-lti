@@ -119,7 +119,8 @@ values are:
   * `launch_path` The path to receive LTI launch requests at. Defaults to
     '/lti/launch'.
   * `redirect` If true, redirect to the `app_path`. If false, pass the launch
-    request through to the application. If false, app_path is not used.
+    request through to the application. If false, app_path is not used. Defaults
+    to true.
   * `title` The title of your LTI application.
   * `description` The description of your LTI application.
   * `nonce_validator` A lambda used to validate the current request's nonce.
