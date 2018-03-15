@@ -32,6 +32,7 @@ class ConfigTest < Minitest::Test
     assert_equal '/lti/launch',         @config.launch_path
     assert_equal true,                  @config.nonce_validator
     assert_equal 3600,                  @config.time_limit
+    assert_equal nil,                   @config.future_time_limit
     assert_equal 'LTI App',             @config.title
     assert_equal true,                  @config.redirect
     assert_instance_of Proc,            @config.success

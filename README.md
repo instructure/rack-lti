@@ -43,7 +43,9 @@ class Application < Rails::Application
       request.session['launch_params'] = lti_params
       response.headers['X-Custom-Header'] = 'value'
     },
+
     time_limit: 60*60,
+    future_time_limit: 60,
 
     extensions: {
       'canvas.instructure.com' => {
@@ -83,7 +85,9 @@ class Application < Sinatra::Base
       request.session['launch_params'] = lti_params
       response.headers['X-Custom-Header'] = 'value'
     },
+
     time_limit: 60*60,
+    future_time_limit: 60
 
     extensions: {
       'canvas.instructure.com' => {
@@ -125,8 +129,10 @@ values are:
   * `description` The description of your LTI application.
   * `nonce_validator` A lambda used to validate the current request's nonce.
     It is passed the nonce to verify. If not provided, all nonces are allowed.
-  * `time_limit` The time limit, in seconds, to consider requests valid within.
-    If not passed, the default is 3600 seconds (one hour).
+  * `time_limit` The past time limit, inclusive and in seconds, to consider requests
+    valid within.  If not passed, the default is 3600 seconds (one hour).
+  * `future_time_limit` The future time limit, inclusive and in seconds, to consider
+    requests valid within.  If not passed, all future timestamps are accepted as valid.
   * `success` A lambda called on successful launch. It is passed the launch
     params as a hash, the Rack Request, and the Rack Response. Can be used to
     cache params for the current user, find the current user, etc. By default,

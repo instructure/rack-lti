@@ -13,6 +13,7 @@ module Rack::LTI
         req.session['launch_params'] = lti if req.env['rack.session']
       },
       time_limit:      60*60,
+      future_time_limit: nil,
       title:           'LTI App'
     }
 

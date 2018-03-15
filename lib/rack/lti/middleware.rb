@@ -7,7 +7,7 @@ module Rack::LTI
     attr_reader :app, :config
 
     def initialize(app, options = {}, &block)
-      @app    = app 
+      @app    = app
       @config = Config.new(options, &block)
     end
 
@@ -77,11 +77,15 @@ module Rack::LTI
     end
 
     def valid_timestamp?(timestamp)
-      if @config.time_limit.nil?
-        true
-      else
-        (Time.now.to_i - @config.time_limit) <= timestamp
-      end
+      now = Time.now.to_i
+
+      # timestamp too far into the past?
+      return false if (past = config.time_limit) && (now - past > timestamp)
+
+      # timestamp too far into the future?
+      return false if (future = config.future_time_limit) && (now + future < timestamp)
+
+      true
     end
   end
 end

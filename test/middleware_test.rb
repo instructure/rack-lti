@@ -27,7 +27,7 @@ class MiddlewareTest < Minitest::Test
 	def test_routes_returns_the_recognized_routes
 		known_routes = { @lti_app.config.config_path => :config_action,
 			@lti_app.config.launch_path => :launch_action }
-		assert_equal known_routes, @lti_app.routes	
+		assert_equal known_routes, @lti_app.routes
 	end
 
 	def test_call_returns_a_valid_rack_response
@@ -81,10 +81,28 @@ class MiddlewareTest < Minitest::Test
   def test_call_returns_403_on_expired_timestamp
     @lti_app.config.nonce_validator = true
     @lti_app.config.time_limit      = 30
+    timestamp = (Time.now - 60*60).to_i
 
     @lti_app.stub(:valid_request?, true) do
-      env      = Rack::MockRequest.env_for('/lti/launch',
-                                           oauth_timestamp: Time.now - 60*60)
+      env = Rack::MockRequest.env_for(
+        '/lti/launch',
+        params: { oauth_timestamp: timestamp }
+      )
+      response = @lti_app.call(env)
+      assert_equal 403, response[0]
+    end
+  end
+
+  def test_call_returns_403_on_future_timestamp
+    @lti_app.config.nonce_validator   = true
+    @lti_app.config.future_time_limit = 30
+    timestamp = (Time.now + 60*60).to_i
+
+    @lti_app.stub(:valid_request?, true) do
+      env = Rack::MockRequest.env_for(
+        '/lti/launch',
+        params: { oauth_timestamp: timestamp }
+      )
       response = @lti_app.call(env)
       assert_equal 403, response[0]
     end
